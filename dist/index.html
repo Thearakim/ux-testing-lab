@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f7f7f7;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        #headline {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            background-color: #e1e1e1;
+            border-radius: 8px;
+        }
+
+        #button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1 1 auto;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            max-height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            width: 100%;
+            box-sizing: border-box;
+            flex-grow: 1;
+        }
+
+        li {
+            background-color: #f1f1f1;
+            margin: 5px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #about-link {
+            color: hwb(0 24% 76%);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+            margin-top: 20px;
+            padding: 0px;
+            align-self: flex-start;
+            display: flex;
+        }
+
+        #guide {
+            display: none;
+            font-size: 14px;
+            line-height: 20px;
+            color: hwb(0 24% 76%);
+            text-align: left;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8e8e8;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            align-self: flex-start;
+        }
+
+        .list-container {
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            display: none;
+            /* Initially hidden */
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .list-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .clear-button {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px 10px;
+            flex: 0 1 auto;
+            /* Ensure buttons take minimum space */
+        }
+
+        .clear-button:hover {
+            background-color: #d32f2f;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .list-header button {
+            margin-left: auto;
+            /* Add spacing between buttons */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="headline">No Layer Clicked Yet</div>
+
+    <div id="button-container">
+        <button id="log-click-button" title="Logs a click on the selected layer">Log Click</button>
+        <button id="generate-heatmap-button" title="Generates a heatmap based on recorded clicks">Generate
+            Heatmap</button>
+        <button id="export-button" title="Exports click data to a new Figma page">Export Data</button>
+    </div>
+
+    <div class="list-container" id="click-history-container">
+        <div class="list-header">
+            <div class="list-title">Click History</div>
+            <button id="clear-history-button" class="clear-button">Clear History</button>
+        </div>
+        <ul id="click-history"></ul>
+    </div>
+
+    <div class="list-container" id="heatmap-container">
+        <div class="list-header">
+            <div class="list-title">Heatmap Data</div>
+            <button id="clear-heatmap-button" class="clear-button">Clear Heatmap</button>
+        </div>
+        <ul id="heatmap-list"></ul>
+    </div>
+
+    <a id="about-link">Learn more about this plugin</a>
+    <div id="guide">
+        <strong>About This Plugin:</strong><br>
+        This plugin helps you track user interactions, generate heatmaps, export data, and replay sessions to enhance
+        your UX testing process. Use the buttons above to log clicks, clear history, generate visual insights, and more.
+    </div>
+
+    <script>
+
+        document.getElementById('about-link').onclick = () => {
+            const guide = document.getElementById('guide');
+            const link = document.getElementById('about-link');
+            const isGuideVisible = guide.style.display === 'block';
+
+            guide.style.display = isGuideVisible ? 'none' : 'block';
+            link.classList.toggle('active', !isGuideVisible);
+        };
+
+        document.getElementById('log-click-button').onclick = () => {
+            parent.postMessage({ pluginMessage: { type: 'log-click' } }, '*');
+        };
+
+        document.getElementById('clear-history-button').onclick = () => {
+            parent.postMessage({ pluginMessage: { type: 'clear-history' } }, '*');
+        };
+
+        document.getElementById('generate-heatmap-button').onclick = () => {
+            parent.postMessage({ pluginMessage: { type: 'generate-heatmap' } }, '*');
+        };
+
+        document.getElementById('clear-heatmap-button').onclick = () => {
+            parent.postMessage({ pluginMessage: { type: 'clear-heatmap' } }, '*');
+        };
+
+        document.getElementById('export-button').onclick = () => {
+            parent.postMessage({ pluginMessage: { type: 'export-data' } }, '*');
+        };
+
+        window.onmessage = (event) => {
+            const msg = event.data.pluginMessage;
+
+            if (msg.type === 'update-click-history') {
+                const clickHistory = msg.clickedLayers;
+                const historyList = document.getElementById('click-history');
+                const clickHistoryContainer = document.getElementById('click-history-container');
+
+                historyList.innerHTML = ''; // Clear the existing list
+
+                clickHistory.forEach((layerName) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = layerName;
+                    historyList.appendChild(listItem);
+                });
+
+                // Show the click history container
+                clickHistoryContainer.style.display = 'block';
+
+                // Update the headline with the most recent layer clicked
+                document.getElementById('headline').textContent = `Last clicked: ${clickHistory[clickHistory.length - 1]}`;
+
+                // Auto-scroll to the latest entry
+                historyList.scrollTop = historyList.scrollHeight;
+            }
+
+            if (msg.type === 'display-heatmap') {
+                const heatmapData = msg.heatmapData;
+                const heatmapList = document.getElementById('heatmap-list');
+                const heatmapContainer = document.getElementById('heatmap-container');
+
+                heatmapList.innerHTML = ''; // Clear the existing list
+
+                // Sort and display the heatmap data
+                const sortedHeatmapData = Object.entries(heatmapData).sort((a, b) => b[1] - a[1]);
+                const maxClicks = sortedHeatmapData[0][1];  // Maximum number of clicks
+
+                sortedHeatmapData.forEach(([layerName, clicks]) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${layerName}: ${clicks} clicks`;
+
+                    // Apply background and text color based on the click count
+                    if (clicks > maxClicks * 0.8) {
+                        listItem.style.backgroundColor = '#FDE8E8';  // Very High Clicks
+                        listItem.style.color = '#B71C1C'; // Darker text color
+                    } else if (clicks > maxClicks * 0.6) {
+                        listItem.style.backgroundColor = '#FFF3E0';  // High Clicks
+                        listItem.style.color = '#E65100'; // Darker text color
+                    } else if (clicks > maxClicks * 0.4) {
+                        listItem.style.backgroundColor = '#FFF9C4';  // Medium-High Clicks
+                        listItem.style.color = '#827717'; // Darker text color
+                    } else if (clicks > maxClicks * 0.2) {
+                        listItem.style.backgroundColor = '#E8F5E9';  // Medium Clicks
+                        listItem.style.color = '#2E7D32'; // Darker text color
+                    } else {
+                        listItem.style.backgroundColor = '#E3F2FD';  // Low Clicks
+                        listItem.style.color = '#1565C0'; // Darker text color
+                    }
+
+                    heatmapList.appendChild(listItem);
+                });
+
+                // Show the heatmap container
+                heatmapContainer.style.display = 'block';
+            }
+
+            if (msg.type === 'clear-heatmap') {
+                const heatmapList = document.getElementById('heatmap-list');
+                const heatmapContainer = document.getElementById('heatmap-container');
+
+                // Clear the heatmap list and hide the container
+                heatmapList.innerHTML = '';
+                heatmapContainer.style.display = 'none';
+            }
+
+            if (msg.type === 'clear-history') {
+                const historyList = document.getElementById('click-history');
+                const clickHistoryContainer = document.getElementById('click-history-container');
+
+                historyList.innerHTML = ''; // Clear the click history list
+
+                // Hide the click history container
+                clickHistoryContainer.style.display = 'none';
+            }
+        };
+
+    </script>
+
+</body>
+
+</html>
