@@ -5,7 +5,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: 10px;
             background-color: #f7f7f7;
             box-sizing: border-box;
             display: flex;
@@ -93,12 +93,16 @@
             color: hwb(0 24% 76%);
             text-align: left;
             margin-top: 10px;
-            padding: 10px;
+            padding: 2px 12px;
             background-color: #e8e8e8;
             border-radius: 8px;
             width: 100%;
             box-sizing: border-box;
             align-self: flex-start;
+        }
+
+        ol {
+            padding-inline-start: 12px;
         }
 
         .list-container {
@@ -172,23 +176,46 @@
         <ul id="heatmap-list"></ul>
     </div>
 
-    <a id="about-link">Learn more about this plugin</a>
-    <div id="guide">
-        <strong>About This Plugin:</strong><br>
-        This plugin helps you track user interactions, generate heatmaps, export data, and replay sessions to enhance
-        your UX testing process. Use the buttons above to log clicks, clear history, generate visual insights, and more.
+    <a id="about-link" href="#">Learn more about this plugin</a>
+    <div id="guide" class="guide-container">
+        <div class="section">
+            <h2>Plugin Overview</h2>
+            <p>This plugin enhances your UX research by providing tools to track, visualize, and export user
+                interactions directly within Figma.</p>
+        </div>
+        <div class="section">
+            <h2>Core Features</h2>
+            <ul>
+                <li><strong>Log Clicks:</strong> Track user interactions by selecting layers and logging clicks.</li>
+                <li><strong>Generate Heatmap:</strong> Visualize interaction hotspots for better UI/UX insights.</li>
+                <li><strong>Export Data:</strong> Save your interaction data for detailed analysis and reporting.</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>How to Use</h2>
+            <ol>
+                <li>Select a layer and click <strong>‘Log Click’</strong> to start tracking interactions.</li>
+                <li>Click <strong>‘Generate Heatmap’</strong> to visualize the interaction data.</li>
+                <li>Use <strong>‘Export Data’</strong> to save the data for further analysis.</li>
+            </ol>
+        </div>
     </div>
+
+
 
     <script>
 
         document.getElementById('about-link').onclick = () => {
             const guide = document.getElementById('guide');
-            const link = document.getElementById('about-link');
-            const isGuideVisible = guide.style.display === 'block';
-
-            guide.style.display = isGuideVisible ? 'none' : 'block';
-            link.classList.toggle('active', !isGuideVisible);
+            guide.style.display = guide.style.display === 'block' ? 'none' : 'block';
         };
+
+        // Add this in your JavaScript file
+        document.getElementById('log-click-button').title = "Logs a click on the selected layer";
+        document.getElementById('generate-heatmap-button').title = "Generates a heatmap based on recorded clicks";
+        document.getElementById('export-button').title = "Exports click data to a new Figma page";
+
+
 
         document.getElementById('log-click-button').onclick = () => {
             parent.postMessage({ pluginMessage: { type: 'log-click' } }, '*');

@@ -1,8 +1,11 @@
 {
-  "name": "my-figma-plugin",
-  "id": "my-figma-plugin",
+  "name": "UX Testing Lab",
+  "id": "ux-testing-lab",
   "api": "1.0.0",
-  "main": "script.js",  
+  "main": "script.js",
   "ui": "index.html",
-  "editorType": ["figma", "figjam"]
+  "editorType": [
+    "figma",
+    "figjam"
+  ]
 }
