@@ -2,11 +2,11 @@
   "name": "my-figma-plugin",
   "version": "1.0.0",
   "description": "A Figma plugin to log clicks and generate heatmaps.",
-  "main": "script.js",
+  "main": "modules/main.js",
   "scripts": {
     "build": "npm run clean && npm run copy-files",
     "clean": "rm -rf dist",
-    "copy-files": "mkdir -p dist && cp script.js dist/script.js && cp index.html dist/index.html"
+    "copy-files": "mkdir -p dist && cp modules/main.js dist/modules/main.js && cp index.html dist/index.html"
   },
   "author": "",
   "license": "ISC",
