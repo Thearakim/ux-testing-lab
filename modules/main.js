@@ -2,7 +2,7 @@
 
 import { trackClick, clearHistory } from './clickTracker.js';
 import { generateHeatmapOverlay } from './heatmap.js';
-import { exportClickData } from './export.js';
+import { exportClickData } from './exporter.js';
 import { debounce } from './utils.js';
 
 figma.showUI(__html__);
