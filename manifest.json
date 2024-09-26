@@ -2,7 +2,7 @@
   "name": "UX Testing Lab",
   "id": "ux-testing-lab",
   "api": "1.0.0",
-  "main": "script.js",
+  "main": "dist/main.js",
   "ui": "index.html",
   "editorType": [
     "figma",
