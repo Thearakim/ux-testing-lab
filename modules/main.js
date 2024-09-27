@@ -46,7 +46,7 @@ figma.ui.onmessage = (msg) => {
         clearHeatmap(); 
         figma.notify('Heatmap cleared.'); // Inform the user
     } else if (msg.type === 'export-data') {
-        exportClickData();
+        exportClickData(clickedLayers);
     } else if (msg.type === 'start-replay') {
         if (replayInterval) {
             stopReplaySession();
