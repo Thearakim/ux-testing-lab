@@ -71,4 +71,26 @@ function clearHistory(clickedLayers, sessionData) {
     figma.ui.postMessage({ type: 'clear-history' });
 }
 
-// Add your startReplaySession and stopReplaySession functions as they were
+function startReplaySession() {
+    replayIndex = 0;
+    replayInterval = setInterval(() => {
+        if (replayIndex < sessionData.length) {
+            const click = sessionData[replayIndex];
+            const layer = figma.currentPage.findOne(node => node.name === click.layerName);
+            if (layer) {
+                figma.currentPage.selection = [layer];
+                figma.viewport.scrollAndZoomIntoView([layer]);
+                figma.notify(`Replaying click on: ${layer.name}`);
+            }
+            replayIndex++;
+        } else {
+            stopReplaySession();
+        }
+    }, replaySpeed);
+}
+
+function stopReplaySession() {
+    clearInterval(replayInterval);
+    replayInterval = null;
+    figma.notify("Replay session stopped.");
+}
