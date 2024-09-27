@@ -33,26 +33,32 @@ This project is a fork of [Mr.Theara’s project](https://github.com/Thearakim/u
    ```js
    const path = require('path');
    const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+   const HtmlWebpackPlugin = require('html-webpack-plugin'); // Import HtmlWebpackPlugin
 
    module.exports = {
-     mode: 'production', // Use 'development' for development builds
-     entry: './modules/main.js', // Entry point for your main JS file
+     mode: 'production',
+     entry: './modules/main.js',
      output: {
-       filename: 'main.js', // Output bundle file in the `dist/` directory
-       path: path.resolve(__dirname, 'dist'), // Output directory
+       filename: 'main.js',
+       path: path.resolve(__dirname, 'dist'),
      },
      plugins: [
-       new CleanWebpackPlugin(), // Automatically clean the dist folder before each build
+       new CleanWebpackPlugin(), // Automatically clean the dist folder
+       new HtmlWebpackPlugin({
+         template: 'index.html', // Path to your HTML file
+         filename: 'index.html', // Name of the output HTML file in dist/
+       }),
      ],
      module: {
        rules: [
          {
-           test: /\.js$/, // Process all .js files
-           exclude: /node_modules/, // Exclude node_modules
+           test: /\.js$/,
+           exclude: /node_modules/,
          },
        ],
      },
    };
+
    ```
 
 4. **Build the Plugin**:
