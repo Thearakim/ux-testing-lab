@@ -3,7 +3,7 @@
   "id": "ux-testing-lab",
   "api": "1.0.0",
   "main": "dist/main.js",
-  "ui": "index.html",
+  "ui": "dist/index.html",
   "editorType": [
     "figma",
     "figjam"
